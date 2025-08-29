@@ -9,9 +9,14 @@
   "peerDependencies": {
     "typescript": "^5"
   },
+  "scripts": {
+    "postinstall": "cp node_modules/chess-prisma-shared/prisma/schema.prisma prisma/schema.prisma && bunx prisma generate"
+  },
   "dependencies": {
     "@types/ws": "^8.18.1",
+    "chess-prisma-shared": "^1.0.4",
     "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.15.0",
     "ws": "^8.18.3"
   }
 }
