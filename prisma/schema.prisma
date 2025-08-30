@@ -13,3 +13,49 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id           String   @id @default(uuid())
+  phoneNumber  String   @unique
+  username     String   @unique 
+  rating       Int      @default(1200)
+  coins        Int      @default(0) 
+  referralCode String   @unique
+
+  gamesAsWhite Game[]   @relation("GamesAsWhite")
+  gamesAsBlack Game[]   @relation("GamesAsBlack") 
+
+  referredById String? 
+  referredBy   User?    @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals    User[]   @relation("UserReferrals")
+
+  @@index([rating])
+}
+
+model Game {
+  id         String   @id @default(uuid())
+  blackPlayerId    String
+  whitePlayerId    String
+  whitePlayer      User     @relation("GamesAsWhite", fields: [whitePlayerId], references: [id])
+  blackPlayer      User     @relation("GamesAsBlack", fields: [blackPlayerId], references: [id])
+  status        GameStatus
+  result     GameResult? 
+
+  startAt       DateTime   @default(now())
+  endAt         DateTime?
+}
+
+enum GameResult {
+  WHITE_WINS
+  BLACK_WINS
+  DRAW
+} 
+
+enum GameStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+  TIME_UP
+  PLAYER_EXIT
+}

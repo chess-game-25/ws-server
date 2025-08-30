@@ -5,10 +5,12 @@ export class User {
   public socket: WebSocket;
   public userId: string;
   public username: string;
+  public rating: number;
 
   constructor(socket: WebSocket, userJwtClaims: userJwtClaims) {
     this.socket = socket;
     this.userId = userJwtClaims.userId;
+    this.rating = 1200; // TODO: Need to fetch from JWT
     this.username = userJwtClaims.username;
   }
 }

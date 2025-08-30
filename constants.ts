@@ -1,0 +1,1 @@
+export const USER_RATING_MATCH_THRESHOLD = 500;

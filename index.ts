@@ -1,21 +1,20 @@
 import { WebSocketServer } from 'ws';
+import { GameManager } from './GameManager';
+import url from 'url';
+import { extractAuthUser } from './auth';
+
 
 const wss = new WebSocketServer({ port: 8080 });
 
+const gameManager = new GameManager();
 
 wss.on('connection', (ws, req) => {
-
-  ws.on('message', (message) => {
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-
-    console.log(`Received message: ${message}`);
-  });
-
+  //@ts-ignore
+  const token: string = url.parse(req.url, true).query.token;
+  const user = extractAuthUser(token, ws);
+  gameManager.addUser(user);
+  
   ws.on('close', () => {
-    console.log('Client disconnected');
+    gameManager.removeUser(ws);
   });
 });
