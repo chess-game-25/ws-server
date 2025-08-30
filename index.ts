@@ -3,8 +3,8 @@ import { GameManager } from './GameManager';
 import url from 'url';
 import { extractAuthUser } from './auth';
 
-
-const wss = new WebSocketServer({ port: 8080 });
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8001;
+const wss = new WebSocketServer({ port: PORT });
 
 const gameManager = new GameManager();
 
@@ -13,7 +13,6 @@ wss.on('connection', (ws, req) => {
   const token: string = url.parse(req.url, true).query.token;
   const user = extractAuthUser(token, ws);
   gameManager.addUser(user);
-  
   ws.on('close', () => {
     gameManager.removeUser(ws);
   });

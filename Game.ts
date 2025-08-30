@@ -7,19 +7,16 @@ import {
   INIT_GAME,
 } from './messages';
 
-type GAME_STATUS = 'IN_PROGRESS' | 'COMPLETED' | 'ABANDONED' | 'TIME_UP' | 'PLAYER_EXIT';
+type GAME_STATUS = 'IN_PROGRESS' | 'COMPLETED' | 'ABANDONED' | 'TIME_UP' | 'PLAYER_EXIT' | 'WAITING_FOR_PLAYERS';
 type GAME_RESULT = "WHITE_WINS" | "BLACK_WINS" | "DRAW";
 
 export class Game {
   public gameId: string;
   public player1UserId: string;
   public player2UserId: string | null;
-  private moveCount = 0;
   private timer: NodeJS.Timeout | null = null;
   private moveTimer: NodeJS.Timeout | null = null;
   public result: GAME_RESULT | null = null;
-  private player1TimeConsumed = 0;
-  private player2TimeConsumed = 0;
   private startTime = new Date(Date.now());
   private lastMoveTime = new Date(Date.now());
 
@@ -97,6 +94,7 @@ export class Game {
                 id: this.player2UserId ?? '',
               },
             },
+            status: 'IN_PROGRESS',
           },
         });
         return;
@@ -133,6 +131,25 @@ export class Game {
   }
 
   async endGame(status: GAME_STATUS, result: GAME_RESULT) {
+
+    const game = await db.game.findUnique({
+        where: {
+            id: this.gameId,
+            status: 'WAITING_FOR_PLAYERS',
+        },
+    });
+    if(game){
+        // Game is not started yet 
+        await db.game.delete({
+            where: {
+                id: this.gameId,
+            },
+        });
+        this.clearTimer();
+        this.clearMoveTimer();
+        return;
+    }
+
     const updatedGame = await db.game.update({
       data: {
         status,

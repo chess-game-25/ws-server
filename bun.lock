@@ -6,7 +6,7 @@
       "dependencies": {
         "@types/jsonwebtoken": "^9.0.10",
         "@types/ws": "^8.18.1",
-        "chess-prisma-shared": "^1.1.1",
+        "chess-prisma-shared": "^1.2.0",
         "jsonwebtoken": "^9.0.2",
         "prisma": "^6.15.0",
         "url": "^0.11.4",
@@ -59,7 +59,7 @@
 
     "call-bound": ["call-bound@1.0.4", "", { "dependencies": { "call-bind-apply-helpers": "^1.0.2", "get-intrinsic": "^1.3.0" } }, "sha512-+ys997U96po4Kx/ABpBCqhA9EuxJaQWDQg7295H4hBphv3IZg0boBKuwYpt4YXp6MZ5AmZQnU/tyMTlRpaSejg=="],
 
-    "chess-prisma-shared": ["chess-prisma-shared@1.1.1", "", { "dependencies": { "@prisma/client": "^6.15.0", "prisma": "^6.15.0" }, "peerDependencies": { "typescript": "^5" } }, "sha512-7EBxombVA+wTVqrAAfMzWSROvo9aAX8H+thdmvsYymm0aYbZZKQXf6T7vzf880zM18J9r7b7q2uFpwCSiywgKQ=="],
+    "chess-prisma-shared": ["chess-prisma-shared@1.2.0", "", { "dependencies": { "@prisma/client": "^6.15.0", "prisma": "^6.15.0" }, "peerDependencies": { "typescript": "^5" } }, "sha512-6Wd+aUKguF0wmogB40EUMDOTdQ960CKXR2OfjsPfGatjLd+GrWoeNJG5fzlcf5N803+L4ymSBMPKocuqPgm65Q=="],
 
     "chokidar": ["chokidar@4.0.3", "", { "dependencies": { "readdirp": "^4.0.1" } }, "sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA=="],
 

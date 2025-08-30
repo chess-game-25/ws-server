@@ -1,13 +1,9 @@
 import { WebSocket } from 'ws';
 import {
-  GAME_OVER,
   INIT_GAME,
-  JOIN_GAME,
-  OPPONENT_DISCONNECTED,
   JOIN_ROOM,
   GAME_JOINED,
   GAME_NOT_FOUND,
-  GAME_ALERT,
   GAME_ADDED,
   GAME_ENDED,
   EXIT_GAME,
@@ -40,6 +36,8 @@ export class GameManager {
       console.error('User not found?');
       return;
     }
+
+    this.matchMakingQueue = this.matchMakingQueue.filter((u) => u.userId !== user.userId);
     this.users = this.users.filter((user) => user.socket !== socket);
     socketManager.removeUser(user);
   }
@@ -55,14 +53,18 @@ export class GameManager {
         // Making a match between users of closer rating 
         const opponents = this.matchMakingQueue.filter((u) => (Math.abs(user.rating - u.rating) < USER_RATING_MATCH_THRESHOLD && u.userId !== user.userId));
         opponents.sort((a, b) => Math.abs(user.rating - a.rating) - Math.abs(user.rating - b.rating));
+
         if (opponents.length > 0) {
+
           const opponent = opponents.shift()!;
           const game = new Game(user.userId, opponent.userId);
           this.games.push(game);
           socketManager.addUser(user, game.gameId);
           await game?.updateSecondPlayer(user.userId);
           this.matchMakingQueue = this.matchMakingQueue.filter((u) => u.userId !== opponent.userId);
+
         } else {
+
           const game = new Game(user.userId, null);
           this.games.push(game);
           this.matchMakingQueue.push(user);
@@ -74,6 +76,7 @@ export class GameManager {
               gameId:game.gameId,
             }),
           );
+
         }
       }
 
