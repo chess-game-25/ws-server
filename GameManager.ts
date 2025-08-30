@@ -62,9 +62,7 @@ export class GameManager {
           socketManager.addUser(user, game.gameId);
           await game?.updateSecondPlayer(user.userId);
           this.matchMakingQueue = this.matchMakingQueue.filter((u) => u.userId !== opponent.userId);
-
         } else {
-
           const game = new Game(user.userId, null);
           this.games.push(game);
           this.matchMakingQueue.push(user);
@@ -130,12 +128,12 @@ export class GameManager {
               result: gameFromDb.result,
               status: gameFromDb.status,
               blackPlayer: {
-                id: gameFromDb.blackPlayer.id,
-                name: gameFromDb.blackPlayer.username,
+                id: gameFromDb.blackPlayer?.id,
+                name: gameFromDb.blackPlayer?.username,
               },
               whitePlayer: {
-                id: gameFromDb.whitePlayer.id,
-                name: gameFromDb.whitePlayer.username,
+                id: gameFromDb.whitePlayer?.id,
+                name: gameFromDb.whitePlayer?.username,
               },
             }
           }));
@@ -159,8 +157,8 @@ export class GameManager {
             payload: {
               gameId,
               blackPlayer: {
-                id: gameFromDb.blackPlayer.id,
-                name: gameFromDb.blackPlayer.username,
+                id: gameFromDb.blackPlayer?.id,
+                name: gameFromDb.blackPlayer?.username,
               },
               whitePlayer: {
                 id: gameFromDb.whitePlayer.id,

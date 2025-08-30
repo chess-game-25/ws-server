@@ -77,7 +77,32 @@ export class Game {
     this.startTime = new Date(Date.now());
     this.lastMoveTime = this.startTime;
 
-    const game = await db.game.create({
+    // This game is created when roomId is created 
+    const game = await db.game.findUnique({
+        where: {
+            id: this.gameId,
+        },
+    });
+
+    if(game){
+        this.gameId = game.id;
+        await db.game.update({
+          where: {
+            id: this.gameId,
+          },
+          data: {
+            startAt: this.startTime,
+            blackPlayer: {
+              connect: {
+                id: this.player2UserId ?? '',
+              },
+            },
+          },
+        });
+        return;
+    }
+
+    const newGame = await db.game.create({
       data: {
         id: this.gameId,
         status: 'IN_PROGRESS',
@@ -98,7 +123,7 @@ export class Game {
         blackPlayer: true,
       },
     });
-    this.gameId = game.id;
+    this.gameId = newGame.id;
   }
 
 
@@ -130,8 +155,8 @@ export class Game {
           result,
           status,
           blackPlayer: {
-            id: updatedGame.blackPlayer.id,
-            name: updatedGame.blackPlayer.username,
+            id: updatedGame.blackPlayer?.id,
+            name: updatedGame.blackPlayer?.username,
           },
           whitePlayer: {
             id: updatedGame.whitePlayer.id,
