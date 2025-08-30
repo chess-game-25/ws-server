@@ -7,6 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 export interface userJwtClaims {
   userId: string;
   username: string;
+  rating: number;
 };
 
 
